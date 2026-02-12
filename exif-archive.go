@@ -27,6 +27,7 @@ var EXTENSIONS map[string]bool = map[string]bool{
 	".jpeg": true,
 	".heic": true,
 	".mov":  true,
+	".tiff": true,
 }
 
 // 定义文件时间结构体，包括创建时间、exif时间、文件名时间
@@ -60,7 +61,7 @@ func readExifTime(filePath string) (time.Time, error) {
 		if et.TagName == "DateTimeOriginal" {
 			tm, err := time.Parse("2006:01:02 15:04:05", et.Value.(string))
 			if err != nil {
-				log.Fatal("时间格式转换失败")
+				return time.Time{}, fmt.Errorf("exif中拍摄日期格式转换失败%s", err)
 			}
 			return tm, nil
 		}
